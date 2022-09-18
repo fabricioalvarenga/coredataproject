@@ -14,15 +14,25 @@ struct ContentView: View {
     @State private var filterKey: String? = nil
     @State private var predicateType: Predicate? = nil
     @State private var filterValue: String? = nil
-    @State private var sortDescriptors = [SortDescriptor<Country>(\.fullName, order: .reverse)]
+    @State private var sortDescriptors =
+    [
+        SortDescriptor<Country>(\.fullName, order: .reverse)
+    ]
+    
+    @State private var reversedOrder = false
     
     var body: some View {
         VStack {
             FilteredList(filterKey, predicateType, filterValue, sortDescriptors: sortDescriptors ) { (country: Country) in
-                Section(country.wrappedFullName) {
-                    ForEach(country.candyArray, id: \.self) { candy in
+                Section {
+                    ForEach(getOrderedCandies(from: country.candyArray), id: \.self) { candy in
                         Text(candy.wrappedName)
                     }
+                } header: {
+                    Text(country.wrappedFullName)
+                        .onTapGesture {
+                            reversedOrder.toggle()
+                        }
                 }
             }
             
@@ -69,6 +79,14 @@ struct ContentView: View {
                 predicateType = .beginsWith
                 filterValue = "S"
             }
+        }
+    }
+    
+    func getOrderedCandies(from candies: [Candy]) -> [Candy] {
+        if !reversedOrder {
+            return candies.sorted { $0.wrappedName < $1.wrappedName }
+        } else {
+            return candies.sorted { $0.wrappedName > $1.wrappedName }
         }
     }
 }

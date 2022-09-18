@@ -21,7 +21,7 @@ struct FilteredList<T: NSManagedObject, Content: View>: View {
         }
     }
 
-    init(_ filterKey: String? = nil, _ predicateType: Predicate? = nil, _ filterValue: String? = nil, sortDescriptors: [SortDescriptor<T>], @ViewBuilder content: @escaping (T) -> Content) {
+    init(_ filterKey: String? = nil, _ predicateType: Predicate? = nil, _ filterValue: String? = nil, sortDescriptors: [SortDescriptor<T>] = [], @ViewBuilder content: @escaping (T) -> Content) {
         self.predicateType = predicateType
         self.sortDescriptors = sortDescriptors
         
